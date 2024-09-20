@@ -1,5 +1,51 @@
 <h1>Harvest Report</h1>
 <p>This page is a <i>mockup</i> of a simplified harvest report</p>
+<!--New Title Input Field -->
+<label for="reportTitle">Title: </label>
+<input
+  type="text"
+  id="reportTitle"
+  name="reportTitle"
+  placeholder="Enter report title" />
+<!--Start -->
+<label for="start">Start: </label>
+<input
+  type="date"
+  id="start"
+  name="start"
+  min="2014-01-01/"
+  max="2022-01-01"
+  value="2020-05-05" />
+
+<!--End -->
+<label for="end">End: </label>
+<input
+  type="date"
+  id="end"
+  name="end"
+  min="2020-05-05"
+  max="2022-01-01"
+  value="2020-05-15" />
+
+<!--Crop -->
+<label for="crop">Crop: </label>
+<select id="crop">
+  <option value="Broccoli">Broccoli</option>
+  <option value="Kale" selected>Kale</option>
+  <option value="Peas">Peas</option>
+</select>
+
+<!--Field -->
+<select id="field">
+  <label for="field">Field: </label>
+  <option value="All" selected>All</option>
+  <option value="Chuau-1" selected>Chuau-1</option>
+  <option value="SQ7">SQ7</option>
+</select>
+
+<!-- New Generate Report Button -->
+<button type="button">Generate Report</button>
+
 <hr />
 <h1>My Sample Harvest Report</h1>
 <p>Details:</p>
@@ -12,20 +58,3 @@
   <li><strong>End</strong>:05/15/2018</li>
   <li><strong>Crop</strong>:Katie</li>
 </ul>
-
-<!--New Title Input Field -->
-<label for="reportTitle">Title: </label>
-<input
-  type="text"
-  id="reportTitle"
-  name="reportTitle"
-  placeholder="Enter report title" />
-
-<select id="crop">
-  <option value="Broccoli">Broccoli</option>
-  <option value="Kale" selected>Kale</option>
-  <option value="Peas">Peas</option>
-</select>
-
-<!-- New Generate Report Button -->
-<button type="button">Generate Report</button>
