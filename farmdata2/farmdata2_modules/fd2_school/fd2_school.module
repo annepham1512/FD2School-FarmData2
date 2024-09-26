@@ -56,12 +56,13 @@ function fd2_school_menu() {
 
   // Define the name and URL for the default sub-tab that appears when the tab is opened.
   // Content for this default sub-tab is provided by the 'page arguments' above.
-  $items['farm/fd2-school/info'] = array(
+  $items['farm/fd2-sc hool/info'] = array(
     'title' => 'Info',
     'type' => MENU_DEFAULT_LOCAL_TASK,
     'weight' => -100,
   );
   
+  // Define another tab for the module
     $items['farm/fd2-school/html'] = array(
         'title' => 'HTML',
         'type' => MENU_LOCAL_TASK,

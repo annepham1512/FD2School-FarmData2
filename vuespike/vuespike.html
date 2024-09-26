@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Shopping List App</title>
+    <link rel="stylesheet" href="main.css" />
+    <style>
+      [v-cloak] {
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="shopping-list" v-cloak>
+      <div class="header">
+        <h1>{{ header.toLocaleUpperCase() }}</h1>
+        <button
+          v-if="state === 'default'"
+          class="btn btn-primary"
+          @click="changeState('edit')">
+          Add Item
+        </button>
+        <button
+          v-else="state==='edit'"
+          class="btn btn-cancel"
+          @click="changeState('default')">
+          Cancel
+        </button>
+      </div>
+      <div v-if="state === 'edit'" class="add-item-form">
+        <input
+          v-model="newItem"
+          type="text"
+          placeholder="Add an item"
+          @keyup.enter="saveItem" />
+        <button class="btn btn-primary" @click="saveItem">Save Item</button>
+      </div>
+      <ul>
+        <li v-for="item in items">{{ item }}</li>
+      </ul>
+      <p v-if="items.length === 0">Nice job! You've bought all your items.</p>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+    <!-- Load Vue 2 -->
+    <script>
+      Vue.config.devtools = true;
+      var shoppingList = new Vue({
+        el: "#shopping-list",
+        data: {
+          state: "default",
+          header: "Shopping List app",
+          newItem: "",
+          items: [],
+        },
+        methods: {
+          saveItem: function () {
+            this.items.push(this.newItem);
+            this.newItem = "";
+          },
+          changeState: function (newState) {
+            this.state = newState;
+            this.newItem = "";
+          },
+        },
+      });
+    </script>
+  </body>
+</html>
