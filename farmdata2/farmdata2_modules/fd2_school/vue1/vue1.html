@@ -1,100 +1,123 @@
-<h1>Harvest Report</h1>
-<p>This page is a <i>mockup</i> of a simplified harvest report</p>
-<!--New Title Input Field -->
-<label for="reportTitle">Title: </label>
-<input
-  type="text"
-  id="reportTitle"
-  name="reportTitle"
-  placeholder="Enter report title" />
-<br />
-<br />
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Harvest Report</title>
+    <style>
+      table,
+      th,
+      td {
+        border: 1px solid black;
+      }
+      [v-cloak] {
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app" v-cloak>
+      <h1>{{ reportTitle ? reportTitle : 'Mock Harvest Report' }}</h1>
+      <p>This page is a <i>mockup</i> of a simplified harvest report</p>
 
-<!--Start -->
-<label for="start">Start: </label>
-<input
-  type="date"
-  id="start"
-  name="start"
-  min="2014-01-01/"
-  max="2022-01-01"
-  value="2020-05-05" />
-<!--End -->
-<label for="end">End: </label>
-<input
-  type="date"
-  id="end"
-  name="end"
-  min="2020-05-05"
-  max="2022-01-01"
-  value="2020-05-15" />
-<br />
-<br />
-<!--Crop -->
-<label for="crop">Crop: </label>
-<select id="crop">
-  <option value="Broccoli">Broccoli</option>
-  <option value="Kale" selected>Kale</option>
-  <option value="Peas">Peas</option>
-</select>
+      <!-- New Title Input Field -->
+      <label for="reportTitle">Title: </label>
+      <input
+        type="text"
+        id="reportTitle"
+        name="reportTitle"
+        v-model="reportTitle"
+        placeholder="Enter report title" />
+      <br /><br />
 
-<!--Field -->
-<label for="field">Field: </label>
-<select id="field">
-  <label for="field">Field: </label>
-  <option value="All" selected>All</option>
-  <option value="Chuau-1">Chuau-1</option>
+      <!-- Start -->
+      <label for="start">Start: </label>
+      <input
+        type="date"
+        id="start"
+        name="start"
+        min="2014-01-01"
+        max="2022-01-01"
+        value="2020-05-05" />
 
-  <option value="SQ7">SQ7</option>
-</select>
-<br />
-<br />
-<!-- New Generate Report Button -->
-<button type="button">Generate Report</button>
+      <!-- End -->
+      <label for="end">End: </label>
+      <input
+        type="date"
+        id="end"
+        name="end"
+        min="2020-05-05"
+        max="2022-01-01"
+        value="2020-05-15" />
+      <br /><br />
 
-<hr />
-<h1>My Sample Harvest Report</h1>
-<p>Details:</p>
-<ul>
-  <li><strong>Farm</strong>:Sample Farm</li>
-  <li><strong>User</strong>:manager1</li>
-  <li><strong>Language</strong>:English</li>
-  <br />
-  <li><strong>Start</strong>:05/01/2018</li>
-  <li><strong>End</strong>:05/15/2018</li>
-  <li><strong>Crop</strong>:Katie</li>
-</ul>
+      <!-- Crop -->
+      <label for="crop">Crop: </label>
+      <select id="crop">
+        <option value="Broccoli">Broccoli</option>
+        <option value="Kale" selected>Kale</option>
+        <option value="Peas">Peas</option>
+      </select>
 
-<table>
-  <tr>
-    <th>Date</th>
-    <th>Area</th>
-    <th>Crop</th>
-    <th>Yield</th>
-    <th>Units</th>
-  </tr>
+      <!-- Field -->
+      <label for="field">Field: </label>
+      <select id="field">
+        <option value="All" selected>All</option>
+        <option value="Chuau-1">Chuau-1</option>
+        <option value="SQ7">SQ7</option>
+      </select>
+      <br /><br />
 
-  <tr>
-    <td>05/02/2018</td>
-    <td>Chuau-1</td>
-    <td>Kale</td>
-    <td>10</td>
-    <td>Bunches</td>
-  </tr>
+      <!-- New Generate Report Button -->
+      <button type="button">Generate Report</button>
 
-  <tr>
-    <td>05/05/2018</td>
-    <td>SQ7</td>
-    <td>Kale</td>
-    <td>7</td>
-    <td>Bunches</td>
-  </tr>
-</table>
+      <hr />
+      <h1>My Sample Harvest Report</h1>
+      <p>Details:</p>
+      <ul>
+        <li><strong>Farm</strong>: Sample Farm</li>
+        <li><strong>User</strong>: manager1</li>
+        <li><strong>Language</strong>: English</li>
+        <br />
+        <li><strong>Start</strong>: 05/01/2018</li>
+        <li><strong>End</strong>: 05/15/2018</li>
+        <li><strong>Crop</strong>: Katie</li>
+      </ul>
 
-<style>
-  table,
-  th,
-  td {
-    border: 1px solid black;
-  }
-</style>
+      <table>
+        <tr>
+          <th>Date</th>
+          <th>Area</th>
+          <th>Crop</th>
+          <th>Yield</th>
+          <th>Units</th>
+        </tr>
+
+        <tr>
+          <td>05/02/2018</td>
+          <td>Chuau-1</td>
+          <td>Kale</td>
+          <td>10</td>
+          <td>Bunches</td>
+        </tr>
+
+        <tr>
+          <td>05/05/2018</td>
+          <td>SQ7</td>
+          <td>Kale</td>
+          <td>7</td>
+          <td>Bunches</td>
+        </tr>
+      </table>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+    <script>
+      var app = new Vue({
+        el: "#app",
+        data: {
+          reportTitle: "", // Initialize the report title
+        },
+      });
+    </script>
+  </body>
+</html>
