@@ -35,10 +35,15 @@
           @keyup.enter="saveItem" />
         <button class="btn btn-primary" @click="saveItem">Save Item</button>
       </div>
+
       <ul>
         <li v-for="item in items">{{ item }}</li>
       </ul>
       <p v-if="items.length === 0">Nice job! You've bought all your items.</p>
+      <p>Cards:</p>
+      <ul>
+        <li v-for="c in cards">{{ c. rank}} of {{ c.suit }}</li>
+      </ul>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
     <!-- Load Vue 2 -->
@@ -51,6 +56,11 @@
           header: "Shopping List app",
           newItem: "",
           items: [],
+          cards: [
+            { suit: "H", rank: "3" },
+            { suit: "S", rank: "K" },
+            { suit: "D", rank: "7" },
+          ],
         },
         methods: {
           saveItem: function () {
