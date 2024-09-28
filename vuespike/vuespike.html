@@ -44,6 +44,15 @@
       <ul>
         <li v-for="c in cards">{{ c. rank}} of {{ c.suit }}</li>
       </ul>
+      <!-- This is where I create the name input -->
+      <label for="name">Name: </label>
+      <input
+        v-model="newName"
+        id="name"
+        name="your-name"
+        type="text"
+        @keyup.enter="addName" />
+      <button @click="addName">Add Name</button>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
     <!-- Load Vue 2 -->
@@ -53,7 +62,7 @@
         el: "#shopping-list",
         data: {
           state: "default",
-          header: "Shopping List app",
+          header: "Shopping List App",
           newItem: "",
           items: [],
           cards: [
@@ -61,6 +70,8 @@
             { suit: "S", rank: "K" },
             { suit: "D", rank: "7" },
           ],
+          newName: "",
+          names: [],
         },
         methods: {
           saveItem: function () {
@@ -70,6 +81,9 @@
           changeState: function (newState) {
             this.state = newState;
             this.newItem = "";
+          },
+          addName: function (newName) {
+            this.names.push(this.newName);
           },
         },
       });
