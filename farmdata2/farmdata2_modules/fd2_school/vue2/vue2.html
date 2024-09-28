@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Harvest Report</title>
+    <style>
+      table,
+      th,
+      td {
+        border: 1px solid black;
+      }
+      [v-cloak] {
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app" v-cloak>
+      <h1>{{ reportTitle ? reportTitle : 'Mock Harvest Report' }}</h1>
+      <p>This page is a <i>mockup</i> of a simplified harvest report</p>
+
+      <h2>Names List</h2>
+      <ul>
+         <li v-for="name in names" :key="name">{{ name }}</li>
+    </ul>
+      </ul>
+
+      <!-- New Title Input Field -->
+      <label for="reportTitle">Title: </label>
+      <input
+        type="text"
+        id="reportTitle"
+        name="reportTitle"
+        v-model="reportTitle"
+        placeholder="Enter report title" />
+      <br /><br />
+
+      <!-- Start -->
+      <label for="start">Start: </label>
+      <input
+        type="date"
+        id="start"
+        name="start"
+        min="2014-01-01"
+        max="2022-01-01"
+        value="2020-05-05" />
+
+      <!-- End -->
+      <label for="end">End: </label>
+      <input
+        type="date"
+        id="end"
+        name="end"
+        min="2020-05-05"
+        max="2022-01-01"
+        value="2020-05-15" />
+      <br /><br />
+
+      <!-- Crop -->
+      <label for="crops">Crop: </label>
+      <select id="crops">
+        <option v-for="crop in crops" :value="crop" :key="crop">{{ crop }}</option>
+      </select>
+
+      <!-- Field -->
+      <label for="fields">Field: </label>
+      <select id="fields">
+        <option v-for="field in fields" :value="field" :key="field">{{ field }}</option>
+      </select>
+      <br /><br />
+
+      <!-- New Generate Report Button -->
+      <button type="button">Generate Report</button>
+
+      <hr />
+      <h1>My Sample Harvest Report</h1>
+      <p>Details:</p>
+      <ul>
+        <li><strong>Farm</strong>: Sample Farm</li>
+        <li><strong>User</strong>: manager1</li>
+        <li><strong>Language</strong>: English</li>
+        <br />
+        <li><strong>Start</strong>: 05/01/2018</li>
+        <li><strong>End</strong>: 05/15/2018</li>
+        <li><strong>Crop</strong>: Katie</li>
+      </ul>
+
+      <table>
+        <tr>
+          <th>Date</th>
+          <th>Area</th>
+          <th>Crop</th>
+          <th>Yield</th>
+          <th>Units</th>
+        </tr>
+        <tr v-for="(log, index) in harvestLogs" :key="index">
+          <td>{{ log.date }}</td>
+          <td>{{ log.area }}</td>
+          <td>{{ log.crop }}</td>
+          <td>{{ log.yield }}</td>
+          <td>{{ log.units }}</td>
+        </tr>
+      </table>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+    <script>
+      Vue.config.devtools = true
+      var app = new Vue({
+        el: "#app",
+        data: {
+          reportTitle: "",
+          names: ["Joe", "Arun", "Ouwen", "Anh", "Sue"],
+          crops: ["Broccoli", "Kale", "Peas"],
+          fields: ["All", "Chuau-1", "SQ7"],
+          harvestLogs: [
+            { date: "2018-05-02", area: "Chuau-1", crop: "Kale", yield: 10, units: "Bunches" },
+            { date: "2018-05-05", area: "SQ7", crop: "Kale", yield: 7, units: "Bunches" }
+          ]
+        },
+      });
+          </script>
+    </body>
+    
+    </html>
