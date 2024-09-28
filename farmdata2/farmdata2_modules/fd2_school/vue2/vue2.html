@@ -71,7 +71,8 @@
       <br /><br />
 
       <!-- New Generate Report Button -->
-      <button type="button">Generate Report</button>
+     <button type="button" @click="harvestLogs.push({date:'2018-05-01', area:'Orion-3', crop:'Kale', yield:12, units:'Bunches'})">Generate Report</button>
+
 
       <hr />
       <h1>My Sample Harvest Report</h1>
@@ -115,8 +116,6 @@
           crops: ["Broccoli", "Kale", "Peas"],
           fields: ["All", "Chuau-1", "SQ7"],
           harvestLogs: [
-            { date: "2018-05-02", area: "Chuau-1", crop: "Kale", yield: 10, units: "Bunches" },
-            { date: "2018-05-05", area: "SQ7", crop: "Kale", yield: 7, units: "Bunches" }
           ]
         },
       });
