@@ -44,7 +44,17 @@
       <ul>
         <li v-for="c in cards">{{ c. rank}} of {{ c.suit }}</li>
       </ul>
+      <!-- This is where I create the add card input -->
+      <!-- Input field and button for adding a new card -->
+      <label for="new-card">New Card: </label>
+      <input
+        v-model="newCard"
+        id="new-card"
+        type="text"
+        placeholder="Enter a card (e.g., 'A H' or '3 D')" />
+      <button @click="addCard">Add Card</button>
       <!-- This is where I create the name input -->
+      <br />
       <label for="name">Name: </label>
       <input
         v-model="newName"
@@ -65,13 +75,14 @@
           header: "Shopping List App",
           newItem: "",
           items: [],
+          newCard: "",
           cards: [
             { suit: "H", rank: "3" },
             { suit: "S", rank: "K" },
             { suit: "D", rank: "7" },
           ],
           newName: "",
-          names: [],
+          names: ["name"],
         },
         methods: {
           saveItem: function () {
@@ -83,7 +94,22 @@
             this.newItem = "";
           },
           addName: function (newName) {
-            this.names.push(this.newName);
+            if (this.newName !== "") {
+              this.names.push(this.newName);
+              this.newName = "";
+            }
+          },
+          addCard: function () {
+            if (this.newCard.trim() !== "") {
+              const cardDetails = this.newCard.split(" ");
+              if (cardDetails.length === 2) {
+                const newCardObject = {
+                  rank: cardDetails[0],
+                  suit: cardDetails[1],
+                };
+                this.cards.push(newCardObject);
+              }
+            }
           },
         },
       });

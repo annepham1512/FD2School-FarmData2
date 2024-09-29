@@ -71,7 +71,7 @@
       <br /><br />
 
       <!-- New Generate Report Button -->
-     <button type="button" @click="harvestLogs.push({date:'2018-05-01', area:'Orion-3', crop:'Kale', yield:12, units:'Bunches'})">Generate Report</button>
+     <button type="button" @click="generateReport">Generate Report</button>
 
 
       <hr />
@@ -118,6 +118,41 @@
           harvestLogs: [
           ]
         },
+        methods: {
+          generateReport() {
+            // Get the length of the harvestLogs array
+            const logsLength = this.harvestLogs.length;
+
+            // Add different records based om current length
+            if (logsLength == 0) {
+              harvestLogs.push({
+              date: "2018-05-01",
+              area: "Orion-3",
+              crop: "Kale",
+              yield: 12,
+              units: "Bunches",
+            });
+            } else if (logsLength === 1) {
+              this.harvestLogs.push({
+                date: "2018-05-02",
+                area: "Orion-4",
+                crop: "Carrots",
+                yield: 15,
+                units: "Kg",
+              });
+            } else if (logsLength === 2) {
+              this.harvestLogs.push({
+                date: "2018-05-03",
+                area: "Orion-5",
+                crop: "Lettuce",
+                yield: 20,
+                units: "Heads",
+              });
+            } else {
+              alert("All records have been added");
+            }
+          }
+        }
       });
           </script>
     </body>
