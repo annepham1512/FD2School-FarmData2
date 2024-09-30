@@ -22,6 +22,7 @@
 
       <h2>Names List</h2>
       <ul>
+         <li v-if="names.length === 0">No names yet!</li>
          <li v-for="name in names" :key="name">{{ name }}</li>
     </ul>
       </ul>
@@ -87,7 +88,7 @@
         <li><strong>Crop</strong>: Katie</li>
       </ul>
 
-      <table>
+      <table v-if="harvestLogs.length !==0">
         <tr>
           <th>Row</th>
           <th>Date</th>
@@ -118,7 +119,7 @@
         el: "#app",
         data: {
           reportTitle: "",
-          names: ["Joe", "Arun", "Ouwen", "Anh", "Sue"],
+          names: [],
           crops: ["Broccoli", "Kale", "Peas"],
           fields: ["All", "Chuau-1", "SQ7"],
           harvestLogs: [],
