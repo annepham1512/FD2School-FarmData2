@@ -43,9 +43,8 @@
         type="date"
         id="start"
         name="start"
-        min="2014-01-01"
-        max="2022-01-01"
-        value="2020-05-05" />
+        v-model="startDate"
+        :max="end" />
 
       <!-- End -->
       <label for="end">End: </label>
@@ -53,9 +52,8 @@
         type="date"
         id="end"
         name="end"
-        min="2020-05-05"
-        max="2022-01-01"
-        value="2020-05-15" />
+        v-model="endDate"
+        :min="startDate" />
       <br /><br />
 
       <!-- Crop -->
@@ -123,6 +121,8 @@
           crops: ["Broccoli", "Kale", "Peas"],
           fields: ["All", "Chuau-1", "SQ7"],
           harvestLogs: [],
+          startDate: "2020-05-05",  
+          endDate: "2020-05-15",  
         },
         methods: {
           generateReport() {
