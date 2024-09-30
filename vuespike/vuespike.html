@@ -40,10 +40,25 @@
         <li v-for="item in items">{{ item }}</li>
       </ul>
       <p v-if="items.length === 0">Nice job! You've bought all your items.</p>
-      <p>Cards:</p>
-      <ul>
-        <li v-for="c in cards">{{ c. rank}} of {{ c.suit }}</li>
-      </ul>
+
+      <div class="card-header">
+        <p>Cards:</p>
+        <button
+          v-if="state === 'default'"
+          class="btn btn-primary"
+          @click="changeState('edit')">
+          Show cards
+        </button>
+        <button v-else class="btn btn-primary" @click="changeState('default')">
+          Hide cards
+        </button>
+      </div>
+      <div v-if="state === 'edit'" class="cards">
+        <ul>
+          <li v-for="c in cards">{{ c. rank}} of {{ c.suit }}</li>
+        </ul>
+      </div>
+      <br />
       <!-- This is where I create the add card input -->
       <!-- Input field and button for adding a new card -->
       <label for="new-card">New Card: </label>
@@ -56,6 +71,7 @@
       <button @click="addCard">Add Card</button>
       <!-- This is where I create the name input -->
       <br />
+      <br />
       <label for="name">Name: </label>
       <input
         v-model="newName"
@@ -65,13 +81,16 @@
         @keyup.enter="addName" />
       <button @click="addName">Add Name</button>
 
-      <!-- Updated name list with delete functionality -->
       <ul>
         <li v-for="(name,index) in names">
           {{ name + " (" + index + ")" }}
           <button type="button" @click="deleteName">Delete</button>
         </li>
       </ul>
+      <!-- Clear Names Button -->
+      <button :disabled="names.length === 0" @click="clearNames">
+        Clear Names
+      </button>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
     <!-- Load Vue 2 -->
@@ -122,6 +141,9 @@
           },
           deleteName: function (nameIndex) {
             this.names.splice(nameIndex, 1);
+          },
+          clearNames: function () {
+            this.names = []; // Clears the names array
           },
         },
       });
