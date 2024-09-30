@@ -51,7 +51,8 @@
         v-model="newCard"
         id="new-card"
         type="text"
-        placeholder="Enter a card (e.g., 'A H' or '3 D')" />
+        placeholder="Enter a card (e.g., 'A H' or '3 D')"
+        @keyup.enter="addCard" />
       <button @click="addCard">Add Card</button>
       <!-- This is where I create the name input -->
       <br />
@@ -63,6 +64,14 @@
         type="text"
         @keyup.enter="addName" />
       <button @click="addName">Add Name</button>
+
+      <!-- Updated name list with delete functionality -->
+      <ul>
+        <li v-for="(name,index) in names">
+          {{ name + " (" + index + ")" }}
+          <button type="button" @click="deleteName">Delete</button>
+        </li>
+      </ul>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
     <!-- Load Vue 2 -->
@@ -82,7 +91,7 @@
             { suit: "D", rank: "7" },
           ],
           newName: "",
-          names: ["name"],
+          names: [],
         },
         methods: {
           saveItem: function () {
@@ -110,6 +119,9 @@
                 this.cards.push(newCardObject);
               }
             }
+          },
+          deleteName: function (nameIndex) {
+            this.names.splice(nameIndex, 1);
           },
         },
       });

@@ -89,18 +89,24 @@
 
       <table>
         <tr>
+          <th>Row</th>
           <th>Date</th>
           <th>Area</th>
           <th>Crop</th>
           <th>Yield</th>
           <th>Units</th>
+          <th>Edit</th>
+          <th>Delete</th>
         </tr>
         <tr v-for="(log, index) in harvestLogs" :key="index">
+          <td>{{ index + 1 }}</td>
           <td>{{ log.date }}</td>
           <td>{{ log.area }}</td>
           <td>{{ log.crop }}</td>
           <td>{{ log.yield }}</td>
           <td>{{ log.units }}</td>
+          <td><button>Edit</button></td>
+          <td><button @click="harvestLogs.splice(index, 1)">Delete</button></td>
         </tr>
       </table>
     </div>
@@ -115,17 +121,16 @@
           names: ["Joe", "Arun", "Ouwen", "Anh", "Sue"],
           crops: ["Broccoli", "Kale", "Peas"],
           fields: ["All", "Chuau-1", "SQ7"],
-          harvestLogs: [
-          ]
+          harvestLogs: [],
         },
         methods: {
           generateReport() {
             // Get the length of the harvestLogs array
             const logsLength = this.harvestLogs.length;
-
+            console.log(this.harvestLogs.length);
             // Add different records based om current length
             if (logsLength == 0) {
-              harvestLogs.push({
+              this.harvestLogs.push({
               date: "2018-05-01",
               area: "Orion-3",
               crop: "Kale",
