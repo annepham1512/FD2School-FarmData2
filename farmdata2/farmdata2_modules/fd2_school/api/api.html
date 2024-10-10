@@ -80,13 +80,13 @@
         <h1>My Sample Harvest Report</h1>
         <p>Details:</p>
         <ul>
-          <li><strong>Farm</strong>{{ farm }}</li>
-          <li><strong>User</strong>{{ user }}</li>
-          <li><strong>Language</strong>{{ language }}</li>
+          <li><strong>Farm: </strong>{{ farm }}</li>
+          <li><strong>User: </strong>{{ user }}</li>
+          <li><strong>Language: </strong>{{ language }}</li>
           <br />
-          <li><strong>Start</strong>: 05/01/2018</li>
-          <li><strong>End</strong>: 05/15/2018</li>
-          <li><strong>Crop</strong>: Katie</li>
+          <li><strong>Start: </strong>05/01/2018</li>
+          <li><strong>End: </strong>05/15/2018</li>
+          <li><strong>Crop: </strong>Katie</li>
         </ul>
 
         <table v-if="harvestLogs.length !== 0">
@@ -136,6 +136,10 @@
         },
         methods: {
           generateReport() {
+            this.farm = "Sample Farm";
+            this.user = "manager1";
+            this.language = "English";
+
             this.showReport = true;
 
             // If it's the first time clicking, just show the report without adding logs
