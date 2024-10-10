@@ -56,7 +56,7 @@ function fd2_school_menu() {
 
   // Define the name and URL for the default sub-tab that appears when the tab is opened.
   // Content for this default sub-tab is provided by the 'page arguments' above.
-  $items['farm/fd2-sc hool/info'] = array(
+  $items['farm/fd2-school/info'] = array(
     'title' => 'Info',
     'type' => MENU_DEFAULT_LOCAL_TASK,
     'weight' => -100,
@@ -70,6 +70,33 @@ function fd2_school_menu() {
         'page arguments' => array('html'),
         'access arguments' => array('view fd2 school'),
         'weight' => 110,
+    );
+
+    $items['farm/fd2-school/vue1'] = array(
+        'title' => 'Vue 1',
+        'type' => MENU_LOCAL_TASK,
+        'page callback' => 'fd2_school_view',
+        'page arguments' => array('vue1'),
+        'access arguments' => array('view fd2 school'),
+        'weight' => 115,
+    );
+
+      $items['farm/fd2-school/vue2'] = array(
+        'title' => 'Vue 2',
+        'type' => MENU_LOCAL_TASK,
+        'page callback' => 'fd2_school_view',
+        'page arguments' => array('vue2'),
+        'access arguments' => array('view fd2 school'),
+        'weight' => 120,
+    );
+
+    $items['farm/fd2-school/api'] = array(
+        'title' => 'API',
+        'type' => MENU_LOCAL_TASK,
+        'page callback' => 'fd2_school_view',
+        'page arguments' => array('api'),
+        'access arguments' => array('view fd2 school'),
+        'weight' => 125,
     );
 
   return $items;
