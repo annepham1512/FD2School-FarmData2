@@ -57,7 +57,7 @@
       <!-- Crop -->
       <label for="crops">Crop: </label>
       <select id="crops">
-        <option v-for="crop in crops" :value="crop" :key="crop">
+        <option v-for="crop in cropNames" :value="crop" :key="crop">
           {{ crop }}
         </option>
       </select>
@@ -133,7 +133,14 @@
           farm: "",
           user: "",
           language: "",
+          idToCropMap: new Map(),
         },
+        computed: {
+          cropNames() {
+            return Array.from(this.idToCropMap.values());
+          },
+        },
+
         methods: {
           generateReport() {
             axios
@@ -192,6 +199,15 @@
               }
             }
           },
+        },
+        created() {
+          getIDToCropMap("/taxonomy_term.json?bundle=farm_crops", "tid", "name")
+            .then((map) => {
+              this.idToCropMap = map;
+            })
+            .catch((error) => {
+              console.log("Error fetching the ID to Crop Map:", error);
+            });
         },
       });
     </script>
