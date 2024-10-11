@@ -130,12 +130,26 @@
           endDate: "2020-05-15",
           showReport: false,
           firstTimeClickGen: true,
-          farm: "", // Bound to the farm value in the report
-          user: "", // Bound to the user value in the report
-          language: "", // Bound to the language value in the report
+          farm: "",
+          user: "",
+          language: "",
         },
         methods: {
           generateReport() {
+            axios
+              .get("/farm.json")
+              .then((response) => {
+                this.farm = response.data.name; // Get the farm name
+                this.user = response.data.user.name; // Access the user's name
+                this.language = response.data.languages.en.name; // Access the language name
+              })
+
+              .catch((error) => {
+                // Block B is about Error handling
+                console.log("Error Occurred");
+                console.log(error);
+              });
+
             this.farm = "Sample Farm";
             this.user = "manager1";
             this.language = "English";
