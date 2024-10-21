@@ -83,13 +83,9 @@
           <li><strong>Farm: </strong>{{ farm }}</li>
           <li><strong>User: </strong>{{ user }}</li>
           <li><strong>Language: </strong>{{ language }}</li>
-          <br />
-          <li><strong>Start: </strong>05/01/2018</li>
-          <li><strong>End: </strong>05/15/2018</li>
-          <li><strong>Crop: </strong>Katie</li>
         </ul>
 
-        <table v-if="harvestLogs.length !== 0">
+        <table v-if="harvestReportRows.length !== 0">
           <tr>
             <th>Row</th>
             <th>Date</th>
@@ -100,7 +96,7 @@
             <th>Edit</th>
             <th>Delete</th>
           </tr>
-          <tr v-for="(log, index) in harvestLogs" :key="index">
+          <tr v-for="(log, index) in harvestReportRows" :key="index">
             <td>{{ index + 1 }}</td>
             <td>{{ log.date }}</td>
             <td>{{ log.area }}</td>
@@ -139,6 +135,31 @@
         computed: {
           cropNames() {
             return Array.from(this.idToCropMap.values());
+          },
+
+          harvestReportRows() {
+            let tableRows = [];
+            for (let log of this.harvestLogs) {
+              // Get the area name (first area in the array or "Unknown")
+              let areaName = log.area.length > 0 ? log.area[0].name : "Unknown";
+
+              // Get the harvest quantity and units
+              let harvestQuantity = log.quantity.find(
+                (q) => q.label === "Harvest"
+              );
+              let yieldValue = harvestQuantity ? harvestQuantity.value : "N/A";
+              let units = harvestQuantity ? harvestQuantity.unit.name : "N/A"; // Fixed semicolon
+
+              let tableRow = {
+                date: new Date(log.timestamp * 1000).toLocaleDateString(), // Convert timestamp to date
+                area: areaName,
+                crop: log.name.split(" ")[1], // Extracting crop name from log.name
+                yield: yieldValue,
+                units: units,
+              };
+              tableRows.push(tableRow);
+            }
+            return tableRows;
           },
         },
 
@@ -184,40 +205,6 @@
             console.log("End Timestamp: " + endTimestamp);
 
             this.showReport = true;
-
-            if (this.firstTimeClickGen) {
-              this.firstTimeClickGen = false; // Set to false after the first click
-            } else {
-              const logsLength = this.harvestLogs.length;
-
-              if (logsLength == 0) {
-                this.harvestLogs.push({
-                  date: "2018-05-01",
-                  area: "Orion-3",
-                  crop: "Kale",
-                  yield: 12,
-                  units: "Bunches",
-                });
-              } else if (logsLength === 1) {
-                this.harvestLogs.push({
-                  date: "2018-05-02",
-                  area: "Orion-4",
-                  crop: "Carrots",
-                  yield: 15,
-                  units: "Kg",
-                });
-              } else if (logsLength === 2) {
-                this.harvestLogs.push({
-                  date: "2018-05-03",
-                  area: "Orion-5",
-                  crop: "Lettuce",
-                  yield: 20,
-                  units: "Heads",
-                });
-              } else {
-                alert("All records have been added");
-              }
-            }
           },
         },
         created() {
