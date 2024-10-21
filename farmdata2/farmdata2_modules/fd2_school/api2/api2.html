@@ -56,7 +56,8 @@
 
       <!-- Crop -->
       <label for="crops">Crop: </label>
-      <select id="crops">
+      <select id="crops" v-model="selectedCrop">
+        <option value="">All Crops</option>
         <option v-for="crop in cropNames" :value="crop" :key="crop">
           {{ crop }}
         </option>
@@ -125,12 +126,11 @@
           startDate: "2020-05-05",
           endDate: "2020-05-15",
           showReport: false,
-          firstTimeClickGen: true,
+          selectedCrop: "", // New v-model binding for selected crop
           farm: "",
           user: "",
           language: "",
           idToCropMap: new Map(),
-          harvestLogs: [],
         },
         computed: {
           cropNames() {
@@ -148,16 +148,27 @@
                 (q) => q.label === "Harvest"
               );
               let yieldValue = harvestQuantity ? harvestQuantity.value : "N/A";
-              let units = harvestQuantity ? harvestQuantity.unit.name : "N/A"; // Fixed semicolon
+              let units = harvestQuantity ? harvestQuantity.unit.name : "N/A";
+
+              // Get the crop name
+              let cropName = log.name.split(" ")[1];
 
               let tableRow = {
                 date: new Date(log.timestamp * 1000).toLocaleDateString(), // Convert timestamp to date
                 area: areaName,
-                crop: log.name.split(" ")[1], // Extracting crop name from log.name
+                crop: cropName,
                 yield: yieldValue,
                 units: units,
               };
-              tableRows.push(tableRow);
+
+              // Only add the row if 'All Crops' is selected or the crop matches the selected crop
+              if (
+                this.selectedCrop === "" ||
+                this.selectedCrop === "All Crops" ||
+                this.selectedCrop === cropName
+              ) {
+                tableRows.push(tableRow);
+              }
             }
             return tableRows;
           },
