@@ -134,6 +134,7 @@
           user: "",
           language: "",
           idToCropMap: new Map(),
+          harvestLogs: [],
         },
         computed: {
           cropNames() {
@@ -150,9 +151,7 @@
                 this.user = response.data.user.name; // Access the user's name
                 this.language = response.data.languages.en.name; // Access the language name
               })
-
               .catch((error) => {
-                // Block B is about Error handling
                 console.log("Error Occurred");
                 console.log(error);
               });
@@ -161,13 +160,34 @@
             this.user = "manager1";
             this.language = "English";
 
+            // Convert the start and end dates to Unix timestamps using dayjs
+            let startTimestamp = dayjs(this.startDate).unix();
+            let endTimestamp = dayjs(this.endDate).unix();
+
+            // Build the request string for the farmOS API with query parameters
+            let requestString = `/log.json?type=farm_harvest&timestamp[ge]=${startTimestamp}&timestamp[le]=${endTimestamp}`;
+
+            // Call the getAllPages function to fetch the data
+            getAllPages(requestString, this.harvestLogs)
+              .then(() => {
+                console.log(
+                  "Harvest logs successfully retrieved:",
+                  this.harvestLogs
+                );
+              })
+              .catch((error) => {
+                console.error("Error fetching harvest logs:", error);
+              });
+
+            // Log the converted timestamps to the console
+            console.log("Start Timestamp: " + startTimestamp);
+            console.log("End Timestamp: " + endTimestamp);
+
             this.showReport = true;
 
-            // If it's the first time clicking, just show the report without adding logs
             if (this.firstTimeClickGen) {
               this.firstTimeClickGen = false; // Set to false after the first click
             } else {
-              // Otherwise, add harvest logs on each click
               const logsLength = this.harvestLogs.length;
 
               if (logsLength == 0) {
