@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Harvest Report</title>
+    <style>
+      table,
+      th,
+      td {
+        border: 1px solid black;
+      }
+      [v-cloak] {
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app" v-cloak>
+      <h1>{{ reportTitle ? reportTitle : 'Mock Harvest Report' }}</h1>
+      <p>This page is a <i>mockup</i> of a simplified harvest report</p>
+
+      <h2>Names List</h2>
+      <ul>
+        <li v-if="names.length === 0">No names yet!</li>
+        <li v-for="name in names" :key="name">{{ name }}</li>
+      </ul>
+
+      <!-- New Title Input Field -->
+      <label for="reportTitle">Title: </label>
+      <input
+        type="text"
+        id="reportTitle"
+        name="reportTitle"
+        v-model="reportTitle"
+        placeholder="Enter report title" />
+      <br /><br />
+
+      <!-- Start -->
+      <label for="start">Start: </label>
+      <input
+        type="date"
+        id="start"
+        name="start"
+        v-model="startDate"
+        :max="endDate" />
+
+      <!-- End -->
+      <label for="end">End: </label>
+      <input
+        type="date"
+        id="end"
+        name="end"
+        v-model="endDate"
+        :min="startDate" />
+      <br /><br />
+
+      <!-- Crop -->
+      <label for="crops">Crop: </label>
+      <select id="crops">
+        <option v-for="crop in cropNames" :value="crop" :key="crop">
+          {{ crop }}
+        </option>
+      </select>
+
+      <!-- Field -->
+      <label for="fields">Field: </label>
+      <select id="fields">
+        <option v-for="field in fields" :value="field" :key="field">
+          {{ field }}
+        </option>
+      </select>
+      <br /><br />
+
+      <!-- New Generate Report Button -->
+      <button type="button" @click="generateReport">Generate Report</button>
+
+      <!-- Harvest Report Section -->
+      <div v-if="showReport">
+        <hr />
+        <h1>My Sample Harvest Report</h1>
+        <p>Details:</p>
+        <ul>
+          <li><strong>Farm: </strong>{{ farm }}</li>
+          <li><strong>User: </strong>{{ user }}</li>
+          <li><strong>Language: </strong>{{ language }}</li>
+          <br />
+          <li><strong>Start: </strong>05/01/2018</li>
+          <li><strong>End: </strong>05/15/2018</li>
+          <li><strong>Crop: </strong>Katie</li>
+        </ul>
+
+        <table v-if="harvestLogs.length !== 0">
+          <tr>
+            <th>Row</th>
+            <th>Date</th>
+            <th>Area</th>
+            <th>Crop</th>
+            <th>Yield</th>
+            <th>Units</th>
+            <th>Edit</th>
+            <th>Delete</th>
+          </tr>
+          <tr v-for="(log, index) in harvestLogs" :key="index">
+            <td>{{ index + 1 }}</td>
+            <td>{{ log.date }}</td>
+            <td>{{ log.area }}</td>
+            <td>{{ log.crop }}</td>
+            <td>{{ log.yield }}</td>
+            <td>{{ log.units }}</td>
+            <td><button>Edit</button></td>
+            <td>
+              <button @click="harvestLogs.splice(index, 1)">Delete</button>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+    <script>
+      Vue.config.devtools = true;
+      var app = new Vue({
+        el: "#app",
+        data: {
+          reportTitle: "",
+          names: [],
+          crops: ["Broccoli", "Kale", "Peas"],
+          fields: ["All", "Chuau-1", "SQ7"],
+          harvestLogs: [],
+          startDate: "2020-05-05",
+          endDate: "2020-05-15",
+          showReport: false,
+          firstTimeClickGen: true,
+          farm: "",
+          user: "",
+          language: "",
+          idToCropMap: new Map(),
+        },
+        computed: {
+          cropNames() {
+            return Array.from(this.idToCropMap.values());
+          },
+        },
+
+        methods: {
+          generateReport() {
+            axios
+              .get("/farm.json")
+              .then((response) => {
+                this.farm = response.data.name; // Get the farm name
+                this.user = response.data.user.name; // Access the user's name
+                this.language = response.data.languages.en.name; // Access the language name
+              })
+
+              .catch((error) => {
+                // Block B is about Error handling
+                console.log("Error Occurred");
+                console.log(error);
+              });
+
+            this.farm = "Sample Farm";
+            this.user = "manager1";
+            this.language = "English";
+
+            this.showReport = true;
+
+            // If it's the first time clicking, just show the report without adding logs
+            if (this.firstTimeClickGen) {
+              this.firstTimeClickGen = false; // Set to false after the first click
+            } else {
+              // Otherwise, add harvest logs on each click
+              const logsLength = this.harvestLogs.length;
+
+              if (logsLength == 0) {
+                this.harvestLogs.push({
+                  date: "2018-05-01",
+                  area: "Orion-3",
+                  crop: "Kale",
+                  yield: 12,
+                  units: "Bunches",
+                });
+              } else if (logsLength === 1) {
+                this.harvestLogs.push({
+                  date: "2018-05-02",
+                  area: "Orion-4",
+                  crop: "Carrots",
+                  yield: 15,
+                  units: "Kg",
+                });
+              } else if (logsLength === 2) {
+                this.harvestLogs.push({
+                  date: "2018-05-03",
+                  area: "Orion-5",
+                  crop: "Lettuce",
+                  yield: 20,
+                  units: "Heads",
+                });
+              } else {
+                alert("All records have been added");
+              }
+            }
+          },
+        },
+        created() {
+          getIDToCropMap("/taxonomy_term.json?bundle=farm_crops", "tid", "name")
+            .then((map) => {
+              this.idToCropMap = map;
+            })
+            .catch((error) => {
+              console.log("Error fetching the ID to Crop Map:", error);
+            });
+        },
+      });
+    </script>
+  </body>
+</html>
