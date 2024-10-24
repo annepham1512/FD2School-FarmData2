@@ -46,9 +46,9 @@ describe("Test the harvest report default values", () => {
     cy.get("[data-cy=crop-dropdown").children().should("have.length", 112);
   });
 
-  // it("Check generate button clickable", () => {
-  //   cy.get("[data-cy=generate-report-button]").click();
-  // });
+  it("Check generate button clickable", () => {
+    cy.get("[data-cy=generate-report-button]").click();
+  });
 
   it("Check if display the report header after generating the report", () => {
     //Step 1: Before generating the report, ensure the report header does not exist
@@ -59,5 +59,24 @@ describe("Test the harvest report default values", () => {
 
     // Step 3: After generating the report, ensure that the rpeort header is visible
     cy.get("[data-cy=report-header").should("be.visible");
+  });
+
+  it("Check if display the correct farm name when the report is generated", () => {
+    // Click the Generate Report button
+    cy.get("[data-cy=generate-report-button").click();
+
+    // Check if the farm name is correctly displayed
+    cy.get("[data-cy=farm-name]", { timeout: 20000 }).should(
+      "have.text",
+      "Sample Farm"
+    );
+  });
+
+  it("Check if display the correct language when the report is generated", () => {
+    // Step 1: Click the Generate Report button
+    cy.get("[data-cy=generate-report-button]").click();
+
+    // Step 2: Check that the language is correctly displayed
+    cy.get("[data-cy=language]").should("have.text", "English");
   });
 });

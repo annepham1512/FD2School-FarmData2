@@ -87,9 +87,14 @@
         <h1 data-cy="report-header">My Sample Harvest Report</h1>
         <p>Details:</p>
         <ul>
-          <li><strong>Farm: </strong>{{ farm }}</li>
+          <li>
+            <strong>Farm: </strong><span data-cy="farm-name">{{ farm }}</span>
+          </li>
           <li><strong>User: </strong>{{ user }}</li>
-          <li><strong>Language: </strong>{{ language }}</li>
+          <li>
+            <strong>Language: </strong
+            ><span data-cy="language">{{ language }}</span>
+          </li>
         </ul>
 
         <table v-if="harvestReportRows.length !== 0">
