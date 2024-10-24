@@ -74,12 +74,17 @@
       <br /><br />
 
       <!-- New Generate Report Button -->
-      <button type="button" @click="generateReport">Generate Report</button>
+      <button
+        type="button"
+        @click="generateReport"
+        data-cy="generate-report-button">
+        Generate Report
+      </button>
 
       <!-- Harvest Report Section -->
       <div v-if="showReport">
         <hr />
-        <h1>My Sample Harvest Report</h1>
+        <h1 data-cy="report-header">My Sample Harvest Report</h1>
         <p>Details:</p>
         <ul>
           <li><strong>Farm: </strong>{{ farm }}</li>
