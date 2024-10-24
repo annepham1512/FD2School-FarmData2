@@ -57,7 +57,7 @@
 
       <!-- Crop -->
       <label for="crops">Crop: </label>
-      <select id="crops" v-model="selectedCrop">
+      <select id="crops" v-model="selectedCrop" data-cy="crop-dropdown">
         <option value="">All Crops</option>
         <option v-for="crop in cropNames" :value="crop" :key="crop">
           {{ crop }}

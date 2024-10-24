@@ -13,4 +13,36 @@ describe("Test the harvest report default values", () => {
     cy.get("[data-cy=start-date]").should("have.value", "2020-05-05");
     cy.get("[data-cy=end-date]").should("have.value", "2020-05-15");
   });
+
+  it("Check crop dropdown values", () => {
+    // Check the first crop name
+    cy.get("[data-cy=crop-dropdown]")
+      .children()
+      .eq(1)
+      .invoke("text")
+      .then((text) => {
+        expect(text.trim()).to.equal("ARUGULA");
+      });
+
+    // Check the fifth crop name
+    cy.get("[data-cy=crop-dropdown")
+      .children()
+      .eq(5)
+      .invoke("text")
+      .then((text) => {
+        expect(text.trim()).to.equal("BEAN-FAVA");
+      });
+
+    // Check the last crop name
+    cy.get("[data-cy=crop-dropdown")
+      .children()
+      .last()
+      .invoke("text")
+      .then((text) => {
+        expect(text.trim()).to.equal("ZUCCHINI");
+      });
+
+    // Check the number of crops, it is 112 because we also have "All crops"
+    cy.get("[data-cy=crop-dropdown").children().should("have.length", 112);
+  });
 });
