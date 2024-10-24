@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Harvest Report</title>
+    <style>
+      table,
+      th,
+      td {
+        border: 1px solid black;
+      }
+      [v-cloak] {
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app" v-cloak>
+      <h1 data-cy="page-header">{{'Harvest Report'}}</h1>
+      <p>This page is a <i>mockup</i> of a simplified harvest report</p>
+
+      <h2>Names List</h2>
+      <ul>
+        <li v-if="names.length === 0">No names yet!</li>
+        <li v-for="name in names" :key="name">{{ name }}</li>
+      </ul>
+
+      <!-- New Title Input Field -->
+      <label for="reportTitle">Title: </label>
+      <input
+        type="text"
+        id="reportTitle"
+        name="reportTitle"
+        v-model="reportTitle"
+        placeholder="Enter report title" />
+      <br /><br />
+
+      <!-- Start -->
+      <label for="start">Start: </label>
+      <input
+        type="date"
+        id="start"
+        name="start"
+        v-model="startDate"
+        :max="endDate"
+        data-cy="start-date" />
+
+      <!-- End -->
+      <label for="end">End: </label>
+      <input
+        type="date"
+        id="end"
+        name="end"
+        v-model="endDate"
+        :min="startDate"
+        data-cy="end-date" />
+
+      <!-- Crop -->
+      <label for="crops">Crop: </label>
+      <select id="crops" v-model="selectedCrop">
+        <option value="">All Crops</option>
+        <option v-for="crop in cropNames" :value="crop" :key="crop">
+          {{ crop }}
+        </option>
+      </select>
+
+      <!-- Field -->
+      <label for="fields">Field: </label>
+      <select id="fields">
+        <option v-for="field in fields" :value="field" :key="field">
+          {{ field }}
+        </option>
+      </select>
+      <br /><br />
+
+      <!-- New Generate Report Button -->
+      <button type="button" @click="generateReport">Generate Report</button>
+
+      <!-- Harvest Report Section -->
+      <div v-if="showReport">
+        <hr />
+        <h1>My Sample Harvest Report</h1>
+        <p>Details:</p>
+        <ul>
+          <li><strong>Farm: </strong>{{ farm }}</li>
+          <li><strong>User: </strong>{{ user }}</li>
+          <li><strong>Language: </strong>{{ language }}</li>
+        </ul>
+
+        <table v-if="harvestReportRows.length !== 0">
+          <tr>
+            <th>Row</th>
+            <th>Date</th>
+            <th>Area</th>
+            <th>Crop</th>
+            <th>Yield</th>
+            <th>Units</th>
+            <th>Edit</th>
+            <th>Delete</th>
+          </tr>
+          <tr v-for="(log, index) in harvestReportRows" :key="index">
+            <td>{{ index + 1 }}</td>
+            <td>{{ log.date }}</td>
+            <td>{{ log.area }}</td>
+            <td>{{ log.crop }}</td>
+            <td>{{ log.yield }}</td>
+            <td>{{ log.units }}</td>
+            <td><button>Edit</button></td>
+            <td>
+              <button @click="harvestLogs.splice(index, 1)">Delete</button>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+    <script>
+      Vue.config.devtools = true;
+      var app = new Vue({
+        el: "#app",
+        data: {
+          reportTitle: "",
+          names: [],
+          crops: ["Broccoli", "Kale", "Peas"],
+          fields: ["All", "Chuau-1", "SQ7"],
+          harvestLogs: [],
+          startDate: "2020-05-05",
+          endDate: "2020-05-15",
+          showReport: false,
+          selectedCrop: "", // New v-model binding for selected crop
+          farm: "",
+          user: "",
+          language: "",
+          idToCropMap: new Map(),
+        },
+        computed: {
+          cropNames() {
+            return Array.from(this.idToCropMap.values());
+          },
+
+          harvestReportRows() {
+            let tableRows = [];
+            for (let log of this.harvestLogs) {
+              // Get the area name (first area in the array or "Unknown")
+              let areaName = log.area.length > 0 ? log.area[0].name : "Unknown";
+
+              // Get the harvest quantity and units
+              let harvestQuantity = log.quantity.find(
+                (q) => q.label === "Harvest"
+              );
+              let yieldValue = harvestQuantity ? harvestQuantity.value : "N/A";
+              let units = harvestQuantity ? harvestQuantity.unit.name : "N/A";
+
+              // Get the crop name
+              let cropName = log.name.split(" ")[1];
+
+              let tableRow = {
+                date: new Date(log.timestamp * 1000).toLocaleDateString(), // Convert timestamp to date
+                area: areaName,
+                crop: cropName,
+                yield: yieldValue,
+                units: units,
+              };
+
+              // Only add the row if 'All Crops' is selected or the crop matches the selected crop
+              if (
+                this.selectedCrop === "" ||
+                this.selectedCrop === "All Crops" ||
+                this.selectedCrop === cropName
+              ) {
+                tableRows.push(tableRow);
+              }
+            }
+            return tableRows;
+          },
+        },
+
+        methods: {
+          generateReport() {
+            axios
+              .get("/farm.json")
+              .then((response) => {
+                this.farm = response.data.name; // Get the farm name
+                this.user = response.data.user.name; // Access the user's name
+                this.language = response.data.languages.en.name; // Access the language name
+              })
+              .catch((error) => {
+                console.log("Error Occurred");
+                console.log(error);
+              });
+
+            this.farm = "Sample Farm";
+            this.user = "manager1";
+            this.language = "English";
+
+            // Convert the start and end dates to Unix timestamps using dayjs
+            let startTimestamp = dayjs(this.startDate).unix();
+            let endTimestamp = dayjs(this.endDate).unix();
+
+            // Build the request string for the farmOS API with query parameters
+            let requestString = `/log.json?type=farm_harvest&timestamp[ge]=${startTimestamp}&timestamp[le]=${endTimestamp}`;
+
+            // Call the getAllPages function to fetch the data
+            getAllPages(requestString, this.harvestLogs)
+              .then(() => {
+                console.log(
+                  "Harvest logs successfully retrieved:",
+                  this.harvestLogs
+                );
+              })
+              .catch((error) => {
+                console.error("Error fetching harvest logs:", error);
+              });
+
+            // Log the converted timestamps to the console
+            console.log("Start Timestamp: " + startTimestamp);
+            console.log("End Timestamp: " + endTimestamp);
+
+            this.showReport = true;
+          },
+        },
+        created() {
+          getIDToCropMap("/taxonomy_term.json?bundle=farm_crops", "tid", "name")
+            .then((map) => {
+              this.idToCropMap = map;
+            })
+            .catch((error) => {
+              console.log("Error fetching the ID to Crop Map:", error);
+            });
+        },
+      });
+    </script>
+  </body>
+</html>
